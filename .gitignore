@@ -1,0 +1,12 @@
+# python:
+*.pyc
+__pycache__
+dist/
+*.egg-info/
+
+# pytest:
+.pytest_cache
+
+# pytest cov:
+.coverage
+.coverage.xml
