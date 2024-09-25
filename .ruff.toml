@@ -36,8 +36,10 @@ indent-width = 4
 target-version = "py38"
 
 [lint]
-# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
-select = ["E4", "E7", "E9", "F"]
+# - Enable Pyflakes (`F`). Enabled by default.
+# - Enable a subset of the pycodestyle (`E`). Enabled by default.
+# - Enable isort, for sorting of import statements.
+select = ["E4", "E7", "E9", "F", "I"]
 ignore = []
 
 # Allow fix for all enabled rules (when `--fix`) is provided.
