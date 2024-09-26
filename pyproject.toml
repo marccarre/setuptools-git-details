@@ -42,3 +42,9 @@ Changelog = "https://github.com/marccarre/setuptools-git-details/blob/main/CHANG
 
 [tool.setuptools_scm]
 version_file = "setuptools_git_details/_version.py"
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.3.3",
+    "pytest-cov>=5.0.0",
+]
