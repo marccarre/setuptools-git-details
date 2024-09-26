@@ -10,6 +10,3 @@ dist/
 # pytest cov:
 .coverage
 .coverage.xml
-
-# setuptools versioning:
-*/_version.py

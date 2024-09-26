@@ -162,8 +162,8 @@ wheels = [
 
 [[package]]
 name = "setuptools-git-details"
-version = "0.1.dev9+g9959227.d20240927"
-source = { editable = "." }
+version = "0.1.0"
+source = { virtual = "." }
 
 [package.dev-dependencies]
 dev = [
