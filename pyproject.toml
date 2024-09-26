@@ -1,5 +1,9 @@
 [build-system]
-requires = [ "setuptools>=75", "setuptools_scm>=8.1.0" ]
+requires = [
+    "setuptools>=75",
+    "setuptools_scm>=8.1.0",
+    'tomli; python_version < "3.11"',
+]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -28,7 +32,6 @@ classifiers = [
     "Topic :: Utilities",
 ]
 requires-python = ">=3.8"
-dependencies = []
 
 [project.urls]
 Homepage = "https://github.com/marccarre/setuptools-git-details"
