@@ -37,3 +37,6 @@ dev-dependencies = [
     "pytest>=8.3.3",
     "pytest-cov>=5.0.0",
 ]
+
+[project.entry-points."distutils.setup_keywords"]
+setuptools_git_details = "setuptools_git_details.main:main"

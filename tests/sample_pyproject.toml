@@ -1,0 +1,5 @@
+[project]
+name = "test"
+
+[tool.setuptools_git_details]
+file = "tests/_git.py"
