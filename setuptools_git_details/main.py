@@ -165,6 +165,8 @@ class Generate(Command):
 
 
 def finalize_distribution_options(dist: Distribution) -> None:
-    logger.debug("%s %r", "finalize_distribution_options: start:", vars(dist.metadata))
+    meta = dist.metadata
+    logger.debug("fin_dist_opts: start: %r", vars(meta))
+    logger.debug("fin_dist_opts: dist %s %s %s", meta.name, id(dist), id(meta))
     build = dist.get_command_class("build")
     build.sub_commands.append(("Generate", None))
