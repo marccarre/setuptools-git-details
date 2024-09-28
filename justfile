@@ -21,11 +21,11 @@ test-release:
 
 clean:
     rm -fr \
-        _git.py \
         .coverage* \
         .mypy_cache \
         .pytest_cache \
         .venv \
         *.egg-info \
         dist
+    find . -type f -name _git.py -exec rm {} \+
     find . -type d -name __pycache__ -exec rm -r {} \+
