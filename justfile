@@ -21,6 +21,7 @@ test-release:
 
 clean:
     rm -fr \
+        _git.py \
         .coverage* \
         .mypy_cache \
         .pytest_cache \

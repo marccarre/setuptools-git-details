@@ -1,22 +1,33 @@
 from __future__ import annotations
 
+import logging
 import os
+import shutil
 import sys
 from dataclasses import dataclass
 from pathlib import Path
 from string import Template
 from typing import Any, Dict
 
+from setuptools import Command
+from setuptools.dist import Distribution
+from setuptools.errors import PlatformError, SetupError
+
 from setuptools_git_details.git import get_all_details
 
-if sys.version_info >= (3, 11):
-    from tomllib import loads as load_toml
-else:
+if sys.version_info < (3, 11):
     from tomli import loads as load_toml
+else:
+    from tomllib import loads as load_toml
 
 
+logger = logging.getLogger(__name__)
+
+
+DEFAULT_PYPROJECT_TOML = "pyproject.toml"
 TOOL = "tool"
-SETUPTOOLS_GIT_DETAILS = "setuptools_git_details"
+SETUPTOOLS_GIT_DETAILS = "setuptools-git-details"
+WRITE_TO = "write_to"
 
 
 TEMPLATE = Template("""\
@@ -38,16 +49,32 @@ __git__ = git
 """)
 
 
+def main(filepath: str | os.PathLike[str] = DEFAULT_PYPROJECT_TOML) -> None:
+    config = Configuration.from_pyproject_toml(filepath)
+    git_details = get_all_details()
+    content = TEMPLATE.substitute(**git_details)
+    config.write_to.write_text(content)
+
+
+def validate_write_to(dist: Distribution, key: str, value: Any) -> None:
+    if key != WRITE_TO:
+        logger.warning(
+            f"{SETUPTOOLS_GIT_DETAILS}: expected key '{WRITE_TO}' but got key '{key}'. Skipping."
+        )
+        return
+    Configuration.validate_filepath(value)
+
+
 @dataclass
 class Configuration:
     """setuptools-git-details configuration"""
 
-    file: Path
+    write_to: Path
 
     @classmethod
-    def from_file(
+    def from_pyproject_toml(
         cls,
-        name: str | os.PathLike[str] = "pyproject.toml",
+        name: str | os.PathLike[str] = DEFAULT_PYPROJECT_TOML,
     ) -> Configuration:
         """
         Read Configuration from pyproject.toml.
@@ -55,11 +82,12 @@ class Configuration:
         path = Path(name)
         data = path.read_text(encoding="utf-8")
         pyproject_data = load_toml(data)
-        config = cls._validate_pyproject_toml(pyproject_data)
-        return Configuration(file=Path(config["file"]))
+        config = cls.validate_pyproject_toml(pyproject_data)
+        config[WRITE_TO] = Path(config[WRITE_TO])
+        return cls(**config)
 
     @classmethod
-    def _validate_pyproject_toml(cls, pyproject_data: Dict[str, Any]) -> Dict[str, Any]:
+    def validate_pyproject_toml(cls, pyproject_data: Dict[str, Any]) -> Dict[str, Any]:
         if TOOL not in pyproject_data:
             raise ValueError("Invalid pyproject.toml: no tool section")
         tool_section = pyproject_data[TOOL]
@@ -68,15 +96,48 @@ class Configuration:
                 f"Invalid pyproject.toml: no tool.{SETUPTOOLS_GIT_DETAILS} section"
             )
         config = tool_section[SETUPTOOLS_GIT_DETAILS]
-        if "file" not in config:
+        if WRITE_TO not in config:
             raise ValueError(
-                f"Invalid tool.{SETUPTOOLS_GIT_DETAILS} section: file key-value pair is missing"
+                f"Invalid tool.{SETUPTOOLS_GIT_DETAILS} section: {WRITE_TO} key-value pair is missing"
             )
+        cls.validate_filepath(config[WRITE_TO])
         return config
 
+    @classmethod
+    def validate_filepath(cls, value: Any | str | os.PathLike[str]) -> None:
+        filepath = Path(value)
+        if filepath.exists():
+            logger.warning(
+                f"{SETUPTOOLS_GIT_DETAILS}: {filepath.as_posix()} will be overridden."
+            )
+        dir = filepath.parent
+        if not dir.exists():
+            raise SetupError(
+                f"{SETUPTOOLS_GIT_DETAILS}: {dir.as_posix()} does NOT exist."
+            )
+        if not dir.is_dir():
+            raise SetupError(
+                f"{SETUPTOOLS_GIT_DETAILS}: {dir.as_posix()} is NOT a directory."
+            )
 
-def main(filepath: str | os.PathLike[str] = "pyproject.toml") -> None:
-    config = Configuration.from_file(filepath)
-    git_details = get_all_details()
-    content = TEMPLATE.substitute(**git_details)
-    config.file.write_text(content)
+
+class Generate(Command):
+    description = "Write git details to the designated .py file"
+    user_options = [("write_to", None, "Path to write git details to")]
+
+    def initialize_options(self) -> None:
+        if not shutil.which("git"):
+            raise PlatformError(
+                f"{SETUPTOOLS_GIT_DETAILS}: git is either not installed or not in PATH."
+            )
+
+    def finalize_options(self) -> None:
+        pass
+
+    def run(self) -> None:
+        main()
+
+
+def finalize_distribution_options(dist: Distribution) -> None:
+    build = dist.get_command_class("build")
+    build.sub_commands.append(("Generate", None))

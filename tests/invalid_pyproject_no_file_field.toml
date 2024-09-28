@@ -1,4 +1,0 @@
-[project]
-name = "test"
-
-[tool.setuptools_git_details]

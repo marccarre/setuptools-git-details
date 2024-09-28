@@ -8,14 +8,14 @@ from setuptools_git_details.main import Configuration, main
 
 def test_config() -> None:
     project_toml_path = Path(__file__).parent / "sample_pyproject.toml"
-    config = Configuration.from_file(project_toml_path)
-    assert config == Configuration(file=Path("tests/_git.py"))
+    config = Configuration.from_pyproject_toml(project_toml_path)
+    assert config == Configuration(write_to=Path("tests/_git.py"))
 
 
 def test_invalid_config_no_tool_section() -> None:
     project_toml_path = Path(__file__).parent / "invalid_pyproject_no_tool_section.toml"
     with pytest.raises(ValueError, match="Invalid pyproject.toml: no tool section"):
-        Configuration.from_file(project_toml_path)
+        Configuration.from_pyproject_toml(project_toml_path)
 
 
 def test_invalid_config_no_tool_sgd_section() -> None:
@@ -24,21 +24,24 @@ def test_invalid_config_no_tool_sgd_section() -> None:
     )
     with pytest.raises(
         ValueError,
-        match="Invalid pyproject.toml: no tool.setuptools_git_details section",
+        match="Invalid pyproject.toml: no tool.setuptools-git-details section",
     ):
-        Configuration.from_file(project_toml_path)
+        Configuration.from_pyproject_toml(project_toml_path)
 
 
-def test_invalid_config_no_file_field() -> None:
-    project_toml_path = Path(__file__).parent / "invalid_pyproject_no_file_field.toml"
+def test_invalid_config_no_write_to_field() -> None:
+    project_toml_path = (
+        Path(__file__).parent / "invalid_pyproject_no_write_to_field.toml"
+    )
     with pytest.raises(
         ValueError,
-        match="Invalid tool.setuptools_git_details section: file key-value pair is missing",
+        match="Invalid tool.setuptools-git-details section: write_to key-value pair is missing",
     ):
-        Configuration.from_file(project_toml_path)
+        Configuration.from_pyproject_toml(project_toml_path)
 
 
 def test_main() -> None:
+    Path("tests/_git.py").unlink(missing_ok=True)
     project_toml_path = Path(__file__).parent / "sample_pyproject.toml"
     main(project_toml_path)
     with open("tests/_git.py", "r") as f:

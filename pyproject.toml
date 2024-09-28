@@ -24,6 +24,10 @@ classifiers = [
     "Topic :: Utilities",
 ]
 requires-python = ">=3.8"
+dependencies = [
+    "setuptools>=75.1.0",
+    'tomli>=2.0.1; python_version < "3.11"',
+]
 
 [project.urls]
 Homepage = "https://github.com/marccarre/setuptools-git-details"
@@ -38,5 +42,14 @@ dev-dependencies = [
     "pytest-cov>=5.0.0",
 ]
 
+[tool.setuptools]
+packages = ["setuptools_git_details"]
+
 [project.entry-points."distutils.setup_keywords"]
-setuptools_git_details = "setuptools_git_details.main:main"
+write_to = "setuptools_git_details:validate_write_to"
+
+[project.entry-points."distutils.commands"]
+Generate = "setuptools_git_details:Generate"
+
+[project.entry-points."setuptools.finalize_distribution_options"]
+finalize_distribution_options = "setuptools_git_details:finalize_distribution_options"
