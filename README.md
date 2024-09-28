@@ -40,7 +40,7 @@ just clean
 - Create a tag with the same version:
 
   ```console
-  export VERSION="vX.Y.Z"
+  export VERSION="X.Y.Z"  # N.B.: no "v" prefix!
   git tag -a "${VERSION}" -m "${VERSION}"
   git push origin tag "${VERSION}"
   ```
@@ -56,5 +56,13 @@ just clean
   ```console
   python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps setuptools-git-details
   ```
+
+N.B.: in case of release failure, and a re-release, the tag can be deleted this
+way (warning: bad practice to delete tags):
+
+```console
+git tag -d "${VERSION}"
+git push origin --delete "${VERSION}"
+```
 
 [testpypi]: https://test.pypi.org/
