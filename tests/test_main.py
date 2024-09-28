@@ -1,9 +1,10 @@
+import logging
 import re
 from pathlib import Path
 
 import pytest
 
-from setuptools_git_details.main import Configuration, main
+from setuptools_git_details.main import Configuration, get_log_level, main
 
 
 def test_config() -> None:
@@ -68,3 +69,10 @@ def test_main() -> None:
     assert re.match(r'^    "is_dirty": (?:True|False),$', lines[12])
     assert lines[13] == "}\n"
     assert lines[14] == "__git__ = git\n"
+
+
+def test_get_log_level() -> None:
+    assert get_log_level({}) == logging.WARNING
+    assert get_log_level({"SETUPTOOLS_GIT_DETAILS_DEBUG": ""}) == logging.DEBUG
+    assert get_log_level({"SETUPTOOLS_GIT_DETAILS_DEBUG": "1"}) == logging.DEBUG
+    assert get_log_level({"SETUPTOOLS_GIT_DETAILS_DEBUG": "INFO"}) == logging.DEBUG

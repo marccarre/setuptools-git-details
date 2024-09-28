@@ -7,7 +7,7 @@ import sys
 from dataclasses import dataclass
 from pathlib import Path
 from string import Template
-from typing import Any, Dict
+from typing import Any, Dict, Mapping
 
 from setuptools import Command
 from setuptools.dist import Distribution
@@ -22,6 +22,14 @@ else:
 
 
 logger = logging.getLogger(__name__)
+
+
+def get_log_level(env: Mapping[str, str] = os.environ) -> int:
+    value: str | None = env.get("SETUPTOOLS_GIT_DETAILS_DEBUG")
+    return logging.WARNING if value is None else logging.DEBUG
+
+
+logger.setLevel(get_log_level())
 
 
 DEFAULT_PYPROJECT_TOML = "pyproject.toml"
