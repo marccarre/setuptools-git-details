@@ -52,4 +52,4 @@ write_to = "setuptools_git_details:validate_write_to"
 Generate = "setuptools_git_details:Generate"
 
 [project.entry-points."setuptools.finalize_distribution_options"]
-finalize_distribution_options = "setuptools_git_details:finalize_distribution_options"
+setuptools_git_details = "setuptools_git_details:finalize_distribution_options"
