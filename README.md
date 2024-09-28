@@ -30,3 +30,25 @@ just install
 ```console
 just clean
 ```
+
+## Release
+
+### Test-release to [test.pypi.org][testpypi]
+
+- Add API tokens to `~/.pypirc`.
+- Update the version in `pyproject.toml`.
+- Create a tag with the same version:
+
+  ```console
+  export VERSION="vX.Y.Z"
+  git tag -a "${VERSION}" -m "${VERSION}"
+  git push origin tag "${VERSION}"
+  ```
+
+- Run:
+
+  ```console
+  just test-release
+  ```
+
+[testpypi]: https://test.pypi.org/

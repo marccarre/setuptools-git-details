@@ -13,6 +13,12 @@ test:
 install:
     uv run pip uninstall -y setuptools_git_details ; uv run pip install -e $(pwd)
 
+test-release:
+    python3 -m pip install --upgrade build
+    python3 -m build
+    python3 -m pip install --upgrade twine
+    python3 -m twine upload --repository testpypi dist/*
+
 clean:
     rm -fr \
         .coverage* \
