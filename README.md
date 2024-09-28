@@ -51,4 +51,10 @@ just clean
   just test-release
   ```
 
+- Test the release:
+
+  ```console
+  python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps setuptools-git-details
+  ```
+
 [testpypi]: https://test.pypi.org/
