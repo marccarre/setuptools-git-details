@@ -29,6 +29,28 @@ def get_log_level(env: Mapping[str, str] = os.environ) -> int:
     return logging.WARNING if value is None else logging.DEBUG
 
 
+def get_console_handler() -> logging.Handler:
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+    handler.setFormatter(formatter)
+    return handler
+
+
+def get_file_handler(env: Mapping[str, str] = os.environ) -> logging.Handler:
+    handler = logging.FileHandler(
+        env.get("SETUPTOOLS_GIT_DETAILS_LOG_FILE", "setuptools_git_details.log")
+    )
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    )
+    handler.setFormatter(formatter)
+    return handler
+
+
+logger.addHandler(get_console_handler())
+logger.addHandler(get_file_handler())
 logger.setLevel(get_log_level())
 
 
@@ -66,9 +88,7 @@ def main(filepath: str | os.PathLike[str] = DEFAULT_PYPROJECT_TOML) -> None:
 
 def validate_write_to(dist: Distribution, key: str, value: Any) -> None:
     if key != WRITE_TO:
-        logger.warning(
-            f"{SETUPTOOLS_GIT_DETAILS}: expected key '{WRITE_TO}' but got key '{key}'. Skipping."
-        )
+        logger.warning(f"Expected key '{WRITE_TO}' but got key '{key}'. Skipping.")
         return
     Configuration.validate_filepath(value)
 
@@ -115,9 +135,7 @@ class Configuration:
     def validate_filepath(cls, value: Any | str | os.PathLike[str]) -> None:
         filepath = Path(value)
         if filepath.exists():
-            logger.warning(
-                f"{SETUPTOOLS_GIT_DETAILS}: {filepath.as_posix()} will be overridden."
-            )
+            logger.warning("%s will be overridden.", filepath.as_posix())
         dir = filepath.parent
         if not dir.exists():
             raise SetupError(
@@ -147,5 +165,6 @@ class Generate(Command):
 
 
 def finalize_distribution_options(dist: Distribution) -> None:
+    logger.debug("%s %r", "finalize_distribution_options: start:", vars(dist.metadata))
     build = dist.get_command_class("build")
     build.sub_commands.append(("Generate", None))
