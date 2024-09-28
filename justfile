@@ -26,5 +26,6 @@ clean:
         .mypy_cache \
         .pytest_cache \
         .venv \
-        *.egg-info
+        *.egg-info \
+        dist
     find . -type d -name __pycache__ -exec rm -r {} \+
