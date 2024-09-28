@@ -42,9 +42,6 @@ dev-dependencies = [
     "pytest-cov>=5.0.0",
 ]
 
-[tool.setuptools]
-packages = ["setuptools_git_details"]
-
 [project.entry-points."distutils.setup_keywords"]
 write_to = "setuptools_git_details:validate_write_to"
 
@@ -53,3 +50,9 @@ Generate = "setuptools_git_details:Generate"
 
 [project.entry-points."setuptools.finalize_distribution_options"]
 setuptools_git_details = "setuptools_git_details:finalize_distribution_options"
+
+[tool.setuptools]
+packages = ["setuptools_git_details"]
+
+[tool.setuptools-git-details]
+write_to = "setuptools_git_details/_git.py"
