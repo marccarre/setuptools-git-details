@@ -106,7 +106,7 @@ def _create_mock_distribution(name: str = "test") -> Distribution:
 
 
 def test_get_log_level() -> None:
-    assert get_log_level({}) == logging.WARNING
+    assert get_log_level({}) == logging.INFO
     assert get_log_level({"SETUPTOOLS_GIT_DETAILS_DEBUG": ""}) == logging.DEBUG
     assert get_log_level({"SETUPTOOLS_GIT_DETAILS_DEBUG": "1"}) == logging.DEBUG
     assert get_log_level({"SETUPTOOLS_GIT_DETAILS_DEBUG": "INFO"}) == logging.DEBUG

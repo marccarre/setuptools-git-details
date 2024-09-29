@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 def get_log_level(env: Mapping[str, str] = os.environ) -> int:
     value: Optional[str] = env.get("SETUPTOOLS_GIT_DETAILS_DEBUG")
-    return logging.WARNING if value is None else logging.DEBUG
+    return logging.INFO if value is None else logging.DEBUG
 
 
 def get_formatter() -> logging.Formatter:
@@ -156,9 +156,9 @@ def setup_keywords(
     logger.debug("▶️ Start: %s=%s ; %r", attr, value, vars(dist.metadata))
     config = _load_configuration(dist, pyproject_toml)
     if config:
-        logger.debug(f"👍 {SETUPTOOLS_GIT_DETAILS} has a valid configuration.")
+        logger.info(f"👍 {SETUPTOOLS_GIT_DETAILS} has a valid configuration.")
     else:
-        logger.debug(f"⏹️ {SETUPTOOLS_GIT_DETAILS} not configured.")
+        logger.info(f"⏹️ {SETUPTOOLS_GIT_DETAILS} not configured.")
 
 
 def finalize_distribution_options(
@@ -173,12 +173,12 @@ def finalize_distribution_options(
     )
     config = _load_configuration(dist, pyproject_toml)
     if not config:
-        logger.debug(
+        logger.info(
             f"⏹️ {SETUPTOOLS_GIT_DETAILS} not configured. Nothing to do. Bye! 👋😊"
         )
         return
     if not config.enabled:
-        logger.debug(f"⏩ {SETUPTOOLS_GIT_DETAILS} disabled. Nothing to do. Bye! 👋😊")
+        logger.info(f"⏩ {SETUPTOOLS_GIT_DETAILS} disabled. Nothing to do. Bye! 👋😊")
         return
     # Extract git details:
     if not shutil.which("git"):
@@ -186,13 +186,13 @@ def finalize_distribution_options(
             f"{SETUPTOOLS_GIT_DETAILS}: git is either not installed or not in PATH."
         )
     if not git.is_in_git_project():
-        logger.debug(
+        logger.info(
             "⏹️ Not in a git project and no git details in distribution metadata. Nothing to do. Bye! 👋😊"
         )
         return
     values = git.get_all_details()
     # Write git details to file:
-    logger.debug(f"Write git details to file: {config.write_to.as_posix()}")
+    logger.info(f"Write git details to file: {config.write_to.as_posix()}")
     values["timestamp"] = datetime.now(timezone.utc).isoformat()
     content = TEMPLATE.substitute(**values)
     config.write_to.write_text(content)
