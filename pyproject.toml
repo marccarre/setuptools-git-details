@@ -1,6 +1,6 @@
 [project]
 name = "setuptools-git-details"
-version = "0.1.0"
+version = "1.0.0"
 description = "A setuptools package to add details from git to your project."
 readme = "README.md"
 authors = [
