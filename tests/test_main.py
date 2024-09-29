@@ -60,7 +60,7 @@ def test_main() -> None:
     assert re.match(r'^    "tag": "(?:.*?)",$', lines[9])
     assert (
         lines[10]
-        == '    "url": "https///github.com/marccarre/setuptools-git-details",\n'
+        == '    "url": "https://github.com/marccarre/setuptools-git-details",\n'
     )
     assert (
         lines[11]

@@ -48,7 +48,7 @@ def get_repository_url(as_https_url: bool = False) -> str:
 
 
 def _as_https_url(git_url: str) -> str:
-    git_url = git_url.replace("git@", "https://").replace(":", "/")
+    git_url = git_url.replace(":", "/").replace("git@", "https://")
     return _remove_suffix(git_url, ".git")
 
 

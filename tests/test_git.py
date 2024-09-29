@@ -16,7 +16,7 @@ def test_get_all_details() -> None:
     git_details = get_all_details()
     assert len(git_details) == 7
     assert git_details["name"] == "setuptools-git-details"
-    assert git_details["url"] == "https///github.com/marccarre/setuptools-git-details"
+    assert git_details["url"] == "https://github.com/marccarre/setuptools-git-details"
     assert git_details["git"] == "git@github.com:marccarre/setuptools-git-details.git"
     assert "branch" in git_details
     assert "tag" in git_details
