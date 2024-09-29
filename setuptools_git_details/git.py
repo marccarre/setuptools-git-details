@@ -95,10 +95,12 @@ def get_tag() -> str:
         Tag of the most recent Git commit, if any."""
     cmd = subprocess.run(
         ["git", "describe", "--exact-match", "HEAD"],
+        capture_output=True,
         universal_newlines=True,
-        stderr=subprocess.DEVNULL,
     )
-    tag = cmd.stdout or ""  # If no tag, stdout is None, so tag is empty string.
+    if cmd.returncode != 0:
+        return ""  # No tag. Return an empty string.
+    tag = cmd.stdout.strip()
     return f"{tag}-dirty" if tag and has_uncommitted_changes() else tag
 
 
