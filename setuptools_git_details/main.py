@@ -234,7 +234,8 @@ def main() -> None:
         __git__ = {}
     print(SETUPTOOLS_GIT_DETAILS)
     for k, v in __git__.items():
-        print(f"- {k}: {v if v != "" else "N/A"}")
+        v = "N/A" if v == "" else v
+        print(f"- {k}: {v}")
 
 
 if __name__ == "__main__":
