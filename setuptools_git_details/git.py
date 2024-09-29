@@ -14,6 +14,15 @@ def get_all_details() -> Dict[str, str | bool]:
     }
 
 
+def is_in_git_project() -> bool:
+    cmd = subprocess.run(
+        ["git", "rev-parse", "--is-inside-work-tree"],
+        universal_newlines=True,
+        capture_output=True,
+    )
+    return cmd.returncode == 0 and cmd.stdout.strip() == "true"
+
+
 def get_repository_name() -> str:
     """Get the name of the current Git repository, according to its origin.
 

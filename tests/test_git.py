@@ -4,7 +4,12 @@ import uuid
 
 import pytest
 
-from setuptools_git_details.git import get_all_details, get_tag, has_uncommitted_changes
+from setuptools_git_details.git import (
+    get_all_details,
+    get_tag,
+    has_uncommitted_changes,
+    is_in_git_project,
+)
 
 
 def test_get_all_details() -> None:
@@ -50,3 +55,7 @@ def test_get_tag_with_a_tag() -> None:
 
 def _has_tag() -> bool:
     return subprocess.run(["git", "describe", "--exact-match", "HEAD"]).returncode == 0
+
+
+def test_is_in_git_project() -> None:
+    assert is_in_git_project()
