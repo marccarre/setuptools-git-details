@@ -43,13 +43,13 @@ dev-dependencies = [
 ]
 
 [project.entry-points."distutils.setup_keywords"]
-write_to = "setuptools_git_details:validate_write_to"
-
-[project.entry-points."distutils.commands"]
-Generate = "setuptools_git_details:Generate"
+setuptools_git_details = "setuptools_git_details:setup_keywords"
 
 [project.entry-points."setuptools.finalize_distribution_options"]
 setuptools_git_details = "setuptools_git_details:finalize_distribution_options"
+
+[project.scripts]
+setuptools_git_details = "setuptools_git_details:main"
 
 [tool.setuptools]
 packages = ["setuptools_git_details"]

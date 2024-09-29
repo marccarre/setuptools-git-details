@@ -1,0 +1,6 @@
+[project]
+name = "test"
+
+[tool.setuptools-git-details]
+write_to = "tests/_git.py"
+enabled = false
