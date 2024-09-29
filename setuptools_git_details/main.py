@@ -5,7 +5,7 @@ import os
 import shutil
 import sys
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from distutils.errors import DistutilsOptionError, DistutilsSetupError
 from pathlib import Path
 from string import Template
@@ -192,7 +192,7 @@ def finalize_distribution_options(
     values = git.get_all_details()
     # Write git details to file:
     logger.debug(f"Write git details to file: {config.write_to.as_posix()}")
-    values["timestamp"] = datetime.now(UTC).isoformat()
+    values["timestamp"] = datetime.now(timezone.utc).isoformat()
     content = TEMPLATE.substitute(**values)
     config.write_to.write_text(content)
     logger.debug(
