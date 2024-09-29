@@ -54,10 +54,8 @@ def has_uncommitted_changes() -> bool:
     Returns:
         True if "dirty". False otherwise.
     """
-    return (
-        subprocess.run(["git", "diff", "--exit-code", "--quiet", "HEAD"]).returncode
-        != 0
-    )
+    cmd = subprocess.run(["git", "diff", "--exit-code", "--quiet", "HEAD"])
+    return cmd.returncode != 0
 
 
 def get_commit_hash() -> str:
