@@ -1,3 +1,4 @@
+import os
 import re
 import subprocess
 import uuid
@@ -33,6 +34,10 @@ def test_get_tag_without_a_tag_should_return_empty_string() -> None:
     assert get_tag() == ""
 
 
+@pytest.mark.skipif(
+    os.environ.get("CI", "false") == "true",
+    reason="CI does not have a proper git user configured and adding/deleting git tags therefore fails",
+)
 def test_get_tag_with_a_tag() -> None:
     if _has_tag():
         pytest.skip("Do NOT run if there is already a git tag.")
