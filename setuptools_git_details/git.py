@@ -1,6 +1,10 @@
 import subprocess
 from typing import Dict, List, Union
 
+from setuptools_git_details.logging import get_logger
+
+logger = get_logger(__name__)
+
 
 def get_all_details() -> Dict[str, Union[str, bool]]:
     return {
@@ -44,6 +48,7 @@ def get_repository_url(as_https_url: bool = False) -> str:
         URL of the current Git repository.
     """
     url = _run(["git", "config", "--get", "remote.origin.url"])
+    logger.debug("%s", url)
     return _as_https_url(url) if as_https_url else url
 
 
@@ -105,6 +110,7 @@ def get_tag() -> str:
         capture_output=True,
         universal_newlines=True,
     )
+    logger.debug("%r", cmd)
     if cmd.returncode != 0:
         return ""  # No tag. Return an empty string.
     tag = cmd.stdout.strip()
