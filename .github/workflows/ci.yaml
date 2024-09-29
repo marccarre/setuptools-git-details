@@ -47,3 +47,5 @@ jobs:
           pre-commit run --all-files
       - name: Test
         run: uv run pytest
+        env:
+          SETUPTOOLS_GIT_DETAILS_DEBUG: 1
