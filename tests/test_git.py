@@ -5,6 +5,8 @@ import uuid
 import pytest
 
 from setuptools_git_details.git import (
+    _as_git_url,
+    _as_https_url,
     get_all_details,
     get_tag,
     has_uncommitted_changes,
@@ -59,3 +61,35 @@ def _has_tag() -> bool:
 
 def test_is_in_git_project() -> None:
     assert is_in_git_project()
+
+
+def test_as_https_url() -> None:
+    expected_url = "https://github.com/marccarre/setuptools-git-details"
+    assert (
+        _as_https_url("https://github.com/marccarre/setuptools-git-details")
+        == expected_url
+    )
+    assert (
+        _as_https_url("https://github.com/marccarre/setuptools-git-details.git")
+        == expected_url
+    )
+    assert (
+        _as_https_url("git@github.com:marccarre/setuptools-git-details.git")
+        == expected_url
+    )
+
+
+def test_as_git_url() -> None:
+    expected_url = "git@github.com:marccarre/setuptools-git-details.git"
+    assert (
+        _as_git_url("https://github.com/marccarre/setuptools-git-details")
+        == expected_url
+    )
+    assert (
+        _as_git_url("https://github.com/marccarre/setuptools-git-details.git")
+        == expected_url
+    )
+    assert (
+        _as_git_url("git@github.com:marccarre/setuptools-git-details.git")
+        == expected_url
+    )

@@ -49,12 +49,22 @@ def get_repository_url(as_https_url: bool = False) -> str:
     """
     url = _run(["git", "config", "--get", "remote.origin.url"])
     logger.debug("%s", url)
-    return _as_https_url(url) if as_https_url else url
+    return _as_https_url(url) if as_https_url else _as_git_url(url)
 
 
-def _as_https_url(git_url: str) -> str:
-    git_url = git_url.replace(":", "/").replace("git@", "https://")
-    return _remove_suffix(git_url, ".git")
+def _as_https_url(url: str) -> str:
+    if url.startswith("git@"):
+        url = url.replace(":", "/").replace("git@", "https://")
+    return _remove_suffix(url, ".git")
+
+
+def _as_git_url(url: str) -> str:
+    if url.startswith("https://"):
+        url = url.replace("https://", "")
+        url = _remove_suffix(url, ".git")
+        url = url.replace("/", ":", 1)
+        return f"git@{url}.git"
+    return url
 
 
 def _remove_suffix(text: str, suffix: str) -> str:
