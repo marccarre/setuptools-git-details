@@ -12,7 +12,8 @@ A `setuptools` package to add details from git to your project.
   - the `https://` URL to this project,
   - the `git@` URL to this project,
   - whether the current revision/branch/tag is "dirty".
-  This file can then be used at will.
+
+  This file can then be used at will, see [below examples](#3-use-the-generated-file-in-your-python-code).
 - Can be installed & configured through both `setup.py` and [PEP 518][pep518]'s
   `pyproject.toml`.
 - Does not require to change source code of the project.
