@@ -26,6 +26,8 @@ clean:
         .pytest_cache \
         .venv \
         *.egg-info \
-        dist
+        *.log \
+        dist \
+        logs
     find . -type f -name _git.py -exec rm {} \+
     find . -type d -name __pycache__ -exec rm -r {} \+
