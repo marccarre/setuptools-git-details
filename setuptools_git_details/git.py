@@ -52,7 +52,7 @@ def _as_https_url(git_url: str) -> str:
     return _remove_suffix(git_url, ".git")
 
 
-def _remove_suffix(text, suffix):
+def _remove_suffix(text: str, suffix: str) -> str:
     return text[: -len(suffix)] if len(suffix) != 0 and text.endswith(suffix) else text
 
 
