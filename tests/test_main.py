@@ -66,9 +66,9 @@ def test_finalize_distribution_options() -> None:
         lines[2],
     )
     assert lines[3] == ""
-    assert lines[4] == "from typing import Dict"
+    assert lines[4] == "from typing import Dict, Union"
     assert lines[5] == ""
-    assert lines[6] == "git: Dict[str, str | bool] = {"
+    assert lines[6] == "git: Dict[str, Union[str, bool]] = {"
     assert lines[7] == '    "name": "setuptools-git-details",'
     assert re.match(r'^    "revision": "[a-fA-F0-9]{40}(?:-dirty)?",$', lines[8])
     assert re.match(r'^    "branch": "(?:.*?)",$', lines[9])

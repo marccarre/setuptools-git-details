@@ -1,8 +1,8 @@
 import subprocess
-from typing import Dict, List
+from typing import Dict, List, Union
 
 
-def get_all_details() -> Dict[str, str | bool]:
+def get_all_details() -> Dict[str, Union[str, bool]]:
     return {
         "name": get_repository_name(),
         "revision": get_commit_hash(),

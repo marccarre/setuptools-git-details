@@ -9,7 +9,7 @@ from datetime import UTC, datetime
 from distutils.errors import DistutilsOptionError, DistutilsSetupError
 from pathlib import Path
 from string import Template
-from typing import Any, Dict, Mapping
+from typing import Any, Dict, Mapping, Optional, Union
 
 from setuptools.dist import Distribution
 from setuptools.errors import PlatformError, SetupError
@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_log_level(env: Mapping[str, str] = os.environ) -> int:
-    value: str | None = env.get("SETUPTOOLS_GIT_DETAILS_DEBUG")
+    value: Optional[str] = env.get("SETUPTOOLS_GIT_DETAILS_DEBUG")
     return logging.WARNING if value is None else logging.DEBUG
 
 
@@ -68,9 +68,9 @@ TEMPLATE = Template("""\
 # Do NOT change. Do NOT track in version control.
 # Generated at: ${timestamp}
 
-from typing import Dict
+from typing import Dict, Union
 
-git: Dict[str, str | bool] = {
+git: Dict[str, Union[str, bool]] = {
     "name": "${name}",
     "revision": "${revision}",
     "branch": "${branch}",
@@ -83,7 +83,7 @@ __git__ = git
 """)
 
 
-def _read_pyproject_toml(name: str | os.PathLike[str]) -> Dict[str, Any]:
+def _read_pyproject_toml(name: Union[str, os.PathLike[str]]) -> Dict[str, Any]:
     path = Path(name)
     data = path.read_text(encoding="utf-8")
     return load_toml(data)
@@ -99,7 +99,7 @@ class Configuration:
     @classmethod
     def from_pyproject_toml(
         cls,
-        name: str | os.PathLike[str] = PYPROJECT_TOML,
+        name: Union[str, os.PathLike[str]] = PYPROJECT_TOML,
     ) -> Configuration:
         """
         Read Configuration from pyproject.toml.
@@ -131,7 +131,7 @@ class Configuration:
         return config
 
     @classmethod
-    def validate_filepath(cls, value: Any | str | os.PathLike[str]) -> None:
+    def validate_filepath(cls, value: Union[str, os.PathLike[str], Any]) -> None:
         filepath = Path(value)
         if filepath.exists():
             logger.warning("%s will be overridden.", filepath.as_posix())
@@ -150,7 +150,7 @@ def setup_keywords(
     dist: Distribution,
     attr: str,
     value: Any,
-    pyproject_toml: str | os.PathLike[str] = PYPROJECT_TOML,
+    pyproject_toml: Union[str, os.PathLike[str]] = PYPROJECT_TOML,
 ) -> None:
     logger.debug("▶️ Start: %s=%s ; %r", attr, value, vars(dist.metadata))
     config = _load_configuration(dist, pyproject_toml)
@@ -161,7 +161,7 @@ def setup_keywords(
 
 
 def finalize_distribution_options(
-    dist: Distribution, pyproject_toml: str | os.PathLike[str] = PYPROJECT_TOML
+    dist: Distribution, pyproject_toml: Union[str, os.PathLike[str]] = PYPROJECT_TOML
 ) -> None:
     logger.debug(
         "▶️ Start: %s/%s/%s: %r",
@@ -205,7 +205,7 @@ def finalize_distribution_options(
 
 
 def _load_configuration(
-    dist: Distribution, pyproject_toml: str | os.PathLike[str]
+    dist: Distribution, pyproject_toml: Union[str, os.PathLike[str]]
 ) -> Configuration:
     """Load configuration from either setup.py or pyproject.toml."""
     dist_config = getattr(dist, SETUPTOOLS_GIT_DETAILS_SNAKE_CASED, None)

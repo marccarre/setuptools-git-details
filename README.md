@@ -38,9 +38,9 @@ location defined via `write_to` (e.g., in this case `myproject/_git.py`):
 # Do NOT change. Do NOT track in version control.
 # Generated at: 2024-09-29T05:18:09.101566+00:00
 
-from typing import Dict
+from typing import Dict, Union
 
-git: Dict[str, str | bool] = {
+git: Dict[str, Union[str, bool]] = {
     "name": "myproject",
     "revision": "738484d4c18cb04c7f9095c2ec834fea4872f184",
     "branch": "main",
