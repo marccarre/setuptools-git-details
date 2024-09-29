@@ -51,7 +51,8 @@ def get_file_handler(env: Mapping[str, str] = os.environ) -> logging.Handler:
 
 
 logger.addHandler(get_console_handler())
-logger.addHandler(get_file_handler())
+if os.environ.get("SETUPTOOLS_GIT_DETAILS_LOG_TO_FILE"):
+    logger.addHandler(get_file_handler())
 logger.setLevel(get_log_level())
 
 
