@@ -102,7 +102,7 @@ just clean
 
 ### Test-release to [test.pypi.org][testpypi]
 
-- Add API tokens to `~/.pypirc`.
+- Add [test.pypi.org][testpypi]'s API token to `~/.pypirc`.
 - Update the version in `pyproject.toml`.
 - Create a tag with the same version:
 
@@ -132,5 +132,21 @@ git tag -d "${VERSION}"
 git push origin --delete "${VERSION}"
 ```
 
+### Release to [pypi.org][pypi]
+
+- Add [pypi.org][pypi]'s API token to `~/.pypirc`.
+- Run:
+
+  ```console
+  just release
+  ```
+
+- Test the release:
+
+  ```console
+  python3 -m pip install setuptools-git-details
+  ```
+
 [pep518]: https://www.python.org/dev/peps/pep-0518
+[pypi]: https://pypi.org/
 [testpypi]: https://test.pypi.org/
