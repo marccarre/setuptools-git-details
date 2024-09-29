@@ -16,6 +16,7 @@ A `setuptools` package to add details from git to your project.
 - Can be installed & configured through both `setup.py` and [PEP 518][pep518]'s
   `pyproject.toml`.
 - Does not require to change source code of the project.
+- Compatible with Python 3.8+.
 
 ## Usage
 
