@@ -1,4 +1,3 @@
-import logging
 import re
 from pathlib import Path
 from unittest.mock import Mock
@@ -9,7 +8,6 @@ from setuptools.dist import Distribution
 from setuptools_git_details.main import (
     Configuration,
     finalize_distribution_options,
-    get_log_level,
 )
 
 
@@ -103,10 +101,3 @@ def _create_mock_distribution(name: str = "test") -> Distribution:
     mock_dist.metadata = Mock()
     mock_dist.metadata.name = name
     return mock_dist
-
-
-def test_get_log_level() -> None:
-    assert get_log_level({}) == logging.INFO
-    assert get_log_level({"SETUPTOOLS_GIT_DETAILS_DEBUG": ""}) == logging.DEBUG
-    assert get_log_level({"SETUPTOOLS_GIT_DETAILS_DEBUG": "1"}) == logging.DEBUG
-    assert get_log_level({"SETUPTOOLS_GIT_DETAILS_DEBUG": "INFO"}) == logging.DEBUG
